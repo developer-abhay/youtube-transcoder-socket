@@ -1,11 +1,16 @@
 import { WebSocketServer } from 'ws';
-import { parseCookies, verifyToken } from './helper/helper';
-// import { broadcastTimestampUpdate, handleSubscribe, handleUnsubscribe } from './helper/helper';
+import { handleSubscribe, parseCookies, verifyToken } from './helper/helper';
+import { CustomSocket } from './interfaces/types';
+import { initRedis } from './services/redis';
 
 const port = Number(process.env.PORT) || 3005
 const wss = new WebSocketServer({ port });
 
-wss.on('connection', (ws, req) => {
+// Initialize Redis Client
+initRedis()
+
+// Web socket events
+wss.on('connection', (ws: CustomSocket, req) => {
     try {
         // Get cookies from the request headers
         const cookies = parseCookies(req.headers.cookie || '');
@@ -18,15 +23,21 @@ wss.on('connection', (ws, req) => {
         }
 
         // Verify token from the cookies
-        const userData = verifyToken(cookies['access-token']);
+        ws.user = verifyToken(cookies['access-token']);
 
-        console.log(`User with ID ${userData.id} has connected`);
+        console.log(`User with ID ${ws.user.id} has connected`);
 
         // Handle incoming messages from the client
         ws.on('message', async (message: string) => {
             const payload = JSON.parse(message);
 
-            console.log(payload);
+            switch (payload.type) {
+                case 'video:subscribe':
+                    handleSubscribe(payload, ws);
+                    break;
+                default:
+                    console.log('Unknown event type');
+            }
         });
 
         // Handle the client disconnecting

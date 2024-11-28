@@ -1,1 +1,3 @@
-const clients: Map<string, WebSocket> = new Map();
+import { WebSocket } from "ws";
+
+export const videoClients: { [key: string]: WebSocket[] } = {};
