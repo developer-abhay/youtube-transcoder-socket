@@ -11,5 +11,17 @@ export interface User {
 
 export interface SubscribeEvent {
     "type": "video:subscribe",
-    "videoId": string
+    "video_id": string
 }
+
+export interface UnsubscribeEvent {
+    "type": "video:unsubscribe",
+    "video_id": string
+}
+
+export interface Timestamp_Updated {
+    "type": "video:timestamp_updated",
+    "timestamp": number,
+    "user_id": string
+}
+

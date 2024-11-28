@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { handleSubscribe, parseCookies, verifyToken } from './helper/helper';
+import { handleSubscribe, handleUnsubscribe, parseCookies, verifyToken } from './helper/helper';
 import { CustomSocket } from './interfaces/types';
 import { initRedis } from './services/redis';
 
@@ -35,6 +35,11 @@ wss.on('connection', (ws: CustomSocket, req) => {
                 case 'video:subscribe':
                     handleSubscribe(payload, ws);
                     break;
+
+                case 'video:unsubscribe':
+                    handleUnsubscribe(payload, ws);
+                    break;
+
                 default:
                     console.log('Unknown event type');
             }

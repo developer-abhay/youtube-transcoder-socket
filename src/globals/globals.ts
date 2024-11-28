@@ -1,3 +1,3 @@
-import { WebSocket } from "ws";
+import { CustomSocket } from "../interfaces/types";
 
-export const videoClients: { [key: string]: WebSocket[] } = {};
+export const videoClients: { [key: string]: Set<CustomSocket> } = {}
