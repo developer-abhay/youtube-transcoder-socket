@@ -1,3 +1,3 @@
 import { CustomSocket } from "../interfaces/types";
 
-export const videoClients: { [key: string]: Set<CustomSocket> } = {}
+export const videoClients: { [key: string]: Set<CustomSocket> } = {};

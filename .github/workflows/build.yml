@@ -1,0 +1,31 @@
+name : Build and lint pipeline
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs: 
+    ci: 
+      name: Performs linting, formatting, and build the application
+      runs-on: ubuntu-latest
+      steps: 
+        - name: Checkout Code 
+          uses: actions/checkout@v3
+
+        - name: Use Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: "20"
+          
+        - name: Install Dependencies and creating prod build
+          run:  npm install
+             
+        - name: Run Build
+          run: npm run build
+
+        - name: Run linting check
+          run: npm run lint
+          
+        - name: Run formating check
+          run: npm run format
